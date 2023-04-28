@@ -1,4 +1,6 @@
 let computerSelection = null;
+let playerWonRounds = 0;
+let computerWonRounds = 0;
 
 function getComputerSelection() {
     const randomNumber = Math.floor(Math.random() * 3);
@@ -15,32 +17,40 @@ function getComputerSelection() {
     }
 }
 
+
 function playRound(playerSelection, computerSelection) {
+    
     switch (playerSelection) {
         case "rock":
             if (computerSelection === "rock") {
                 return("Tie");
             } else if (computerSelection === "paper"){
+                computerWonRounds++;
                 return("You Lose! Paper beats Rock");
             } else {
+                playerWonRounds++;
                 return("You Win! Rock beats Scissors");
             }
             break;
 
         case "paper":
             if (computerSelection === "rock") {
+                playerWonRounds++;
                 return("You Win! Paper beats Rock");
             } else if (computerSelection === "paper"){
                 return("Tie");
             } else {
+                computerWonRounds++;
                 return("You Lose! Scissors beats Paper");
             }
             break;
 
         case "scissors":
             if (computerSelection === "rock") {
+                computerWonRounds++;
                 return("You Lose! Rock beats Scissors");
             } else if (computerSelection === "paper"){
+                playerWonRounds++;
                 return("You Win! Scissors beats Paper");
             } else {
                 return("Tie");
@@ -51,13 +61,24 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
+function game(numberOfMatches = 5) {
+    for(let i = 0; i < numberOfMatches; i++) {
+        
+        const playerSelection = prompt("Choose between rock, paper or scissors: ").toLowerCase();
+        getComputerSelection(); // The computer gets a random value between "rock", "paper" or "scissors"
+        console.log("Player selection: " + playerSelection);
+        console.log("Computer selection: " + computerSelection);
+        console.log(playRound(playerSelection, computerSelection));
 
-const playerSelection = prompt("Choose between rock, paper or scissors: ").toLowerCase();
+    }
 
-getComputerSelection(); // The computer gets a random value between "rock", "paper" or "scissors"
+    if(playerWonRounds > computerWonRounds) {
+        console.log("You won the game!");
+    } else if (playerWonRounds === computerWonRounds) {
+        console.log("The game ended in a draw!");
+    } else {
+        console.log("The computer won the game!");
+    }
+}
 
-console.log("Player selection: " + playerSelection);
-
-console.log("Computer selection: " + computerSelection);
-
-console.log(playRound(playerSelection, computerSelection));
+game();
