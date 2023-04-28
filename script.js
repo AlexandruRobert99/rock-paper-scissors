@@ -1,20 +1,13 @@
-let computerSelection = null;
+const computerSelection = ['rock', 'paper', 'scissors'];
+let playerSelection = null;
 let playerWonRounds = 0;
 let computerWonRounds = 0;
+let roundsPlayed = 0;
+
 
 function getComputerSelection() {
     const randomNumber = Math.floor(Math.random() * 3);
-    switch(randomNumber) {
-        case 0:
-            computerSelection = "rock";
-            break;
-        case 1:
-            computerSelection = "paper";
-            break;
-        case 2:
-            computerSelection = "scissors";
-            break;
-    }
+    return computerSelection[randomNumber];
 }
 
 
@@ -61,24 +54,81 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game(numberOfMatches = 5) {
-    for(let i = 0; i < numberOfMatches; i++) {
-        
-        const playerSelection = prompt("Choose between rock, paper or scissors: ").toLowerCase();
-        getComputerSelection(); // The computer gets a random value between "rock", "paper" or "scissors"
-        console.log("Player selection: " + playerSelection);
-        console.log("Computer selection: " + computerSelection);
-        console.log(playRound(playerSelection, computerSelection));
+const rockButton = document.querySelector('#rock');
+const paperButton = document.querySelector('#paper');
+const scissorsButton = document.querySelector('#scissors');
+const textPlayerScore = document.querySelector('#player-score');
+const textComputerScore = document.querySelector('#computer-score');
+const textRoundsPlayed = document.querySelector('#rounds-played');
+const textRoundResult = document.createElement('div');
+document.body.appendChild(textRoundResult);
+const textGameResult = document.createElement('div');
+document.body.appendChild(textGameResult);
 
-    }
 
-    if(playerWonRounds > computerWonRounds) {
-        console.log("You won the game!");
-    } else if (playerWonRounds === computerWonRounds) {
-        console.log("The game ended in a draw!");
-    } else {
-        console.log("The computer won the game!");
-    }
+rockButton.addEventListener('click', () => {
+    playerSelection = "rock";
+    const computerSelection = getComputerSelection();
+    textRoundResult.textContent = playRound(playerSelection, computerSelection);
+    textPlayerScore.textContent = playerWonRounds;
+    textComputerScore.textContent = computerWonRounds;
+    roundsPlayed++;
+    textRoundsPlayed.textContent = roundsPlayed;
+    game();
+});
+
+paperButton.addEventListener('click', () => {
+    playerSelection = "paper";
+    const computerSelection = getComputerSelection();
+    textRoundResult.textContent = playRound(playerSelection, computerSelection);
+    textPlayerScore.textContent = playerWonRounds;
+    textComputerScore.textContent = computerWonRounds;
+    roundsPlayed++;
+    textRoundsPlayed.textContent = roundsPlayed;
+    game();
+});
+
+scissorsButton.addEventListener('click', () => {
+    playerSelection = "scissors";
+    const computerSelection = getComputerSelection();
+    textRoundResult.textContent = playRound(playerSelection, computerSelection);
+    textPlayerScore.textContent = playerWonRounds;
+    textComputerScore.textContent = computerWonRounds;
+    roundsPlayed++;
+    textRoundsPlayed.textContent = roundsPlayed;
+    game();
+});
+
+function resetGame() {
+    textPlayerScore.textContent = playerWonRounds;
+    textComputerScore.textContent = computerWonRounds;
+    playerWonRounds = 0;
+    computerWonRounds = 0;
+    roundsPlayed = 0;
+    
 }
 
+function game(numberOfRounds = 5) {
+    
+    if(roundsPlayed == numberOfRounds){
+
+        if(playerWonRounds > computerWonRounds) {
+            textGameResult.style.backgroundColor = "green";
+            textGameResult.textContent = "You won the game!";
+            resetGame()
+        } else if (playerWonRounds === computerWonRounds) {
+            textGameResult.style.backgroundColor = "yellow";
+            textGameResult.textContent = "The game ended in a draw!";
+            resetGame()
+        } else {
+            textGameResult.style.backgroundColor = "red";
+            textGameResult.textContent = "The computer won the game!";
+            resetGame()
+        }
+    } else {
+        textGameResult.textContent = '';
+    }
+    
+}
+    
 game();
